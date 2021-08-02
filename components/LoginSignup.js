@@ -1,9 +1,10 @@
-import React, { useState, useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 import { StyleSheet, Text, View, TextInput, Button, Alert, ActivityIndicator, StatusBar, TouchableOpacity } from 'react-native';
 import firebase from '../database/firebase';
 
 const LoginSignup = ({ navigation, route }) => {
 
+    // State section
     const [displayName, setDisplayName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -12,8 +13,9 @@ const LoginSignup = ({ navigation, route }) => {
     const [errorMessage, setErrorMessage] = useState('')
 
     // will rerender the page if isLogin change
-    useEffect(()=> {}, [isLogin])
+    useEffect(() => { }, [isLogin])
 
+    // reset all values
     const allInitialValues = () => {
         setDisplayName('')
         setEmail('')
@@ -23,6 +25,7 @@ const LoginSignup = ({ navigation, route }) => {
         setErrorMessage('')
     }
 
+    // reset the values(only for special cases)
     const initialValues = () => {
         setDisplayName('')
         setEmail('')
@@ -30,16 +33,18 @@ const LoginSignup = ({ navigation, route }) => {
         setIsLoading(false)
     }
 
+    // toggle function to switch from Login page to Signup page
     const toggleRender = signal => {
-        if(signal === 's'){
+        if (signal === 's') {
             initialValues()
             setIsLogin(false)
-        }else{
+        } else {
             initialValues()
             setIsLogin(true)
         }
     }
 
+    // function to handle the input values
     const handleInput = (value, name) => {
         if (name === 'displayName') {
             setDisplayName(value)
@@ -50,13 +55,15 @@ const LoginSignup = ({ navigation, route }) => {
         }
     }
 
+    // function to handle the errors
     const handleError = error => {
         setErrorMessage(error)
         console.log(errorMessage)
     }
 
+    // function to handle the submit event in Login page
     const handleSubmitLogin = () => {
-        if (email === '' && password === '') {
+        if (email === '' || password === '') {
             Alert.alert('Enter details to login!')
         } else {
             setIsLoading(true)
@@ -73,8 +80,9 @@ const LoginSignup = ({ navigation, route }) => {
         }
     }
 
+    // function to handle submit event in Signup page
     const handleSumbitSignup = () => {
-        if (email === '' && password === '') {
+        if (email === '' || password === '') {
             Alert.alert('Enter details to signup!')
         } else {
             setIsLoading(true)
@@ -92,54 +100,10 @@ const LoginSignup = ({ navigation, route }) => {
         }
     }
 
-    if (isLoading) {
-        return (
-            <View style={styles.preloader}>
-                <StatusBar
-                    backgroundColor='#000000'
-                    barStyle='light-content'
-                />
-                <ActivityIndicator size="large" color="#9E9E9E" />
-            </View>
-        )
-    } else if (isLogin) {
-        return (
-            <View style={styles.container}>
-                {/* Initial status bar */}
-                <StatusBar
-                    backgroundColor='#000000'
-                    barStyle='light-content'
-                />
-                <TextInput
-                    style={styles.inputStyle}
-                    placeholder="Email"
-                    placeholderTextColor='#aeaeae'
-                    value={email}
-                    onChangeText={(value) => handleInput(value, 'email')}
-                />
-                <TextInput
-                    style={styles.inputStyle}
-                    placeholder="Password"
-                    placeholderTextColor='#aeaeae'
-                    value={password}
-                    onChangeText={(value) => handleInput(value, 'password')}
-                    maxLength={15}
-                    secureTextEntry={true}
-                />
-                <TouchableOpacity style={styles.submitButton} onPress={() => handleSubmitLogin()}>
-                    <Text style={styles.submitButtonText}>Login</Text>
-                </TouchableOpacity>
-
-                <Text
-                    style={styles.loginText}
-                    onPress={() => toggleRender('s')}>
-                    Don't have account? Click here to signup
-                </Text>
-            </View>
-        )
-    } else {
-        return (
-            <View style={styles.container}>
+    // function which serves as conditional render for the input name
+    const inputNameRender = () => {
+        if (!isLogin) {
+            return (
                 <TextInput
                     style={styles.inputStyle}
                     placeholder="Name"
@@ -147,6 +111,72 @@ const LoginSignup = ({ navigation, route }) => {
                     value={displayName}
                     onChangeText={(value) => handleInput(value, 'displayName')}
                 />
+
+            )
+        } else {
+            return null
+        }
+    }
+
+    // function which serves as conditional render for the submit button
+    const submitButtonRender = () => {
+        if (!isLogin) {
+            return (
+                <TouchableOpacity style={styles.submitButton} onPress={() => handleSumbitSignup()}>
+                    <Text style={styles.submitButtonText}>Signup</Text>
+                </TouchableOpacity>
+            )
+        } else {
+            return (
+                <TouchableOpacity style={styles.submitButton} onPress={() => handleSubmitLogin()}>
+                    <Text style={styles.submitButtonText}>Login</Text>
+                </TouchableOpacity>
+            )
+        }
+    }
+
+    // function which serves as conditional render for the link
+    const linkRender = () => {
+        if (!isLogin) {
+            return (
+                <Text
+                    style={styles.loginText}
+                    onPress={() => toggleRender('l')}>
+                    Already Registered? Click here to login
+                </Text>
+            )
+        } else {
+            return (
+                <Text
+                    style={styles.loginText}
+                    onPress={() => toggleRender('s')}>
+                    Don't have account? Click here to signup
+                </Text>
+            )
+        }
+    }
+
+    if (isLoading) { // Verify if is loading
+        return (
+            <View style={styles.preloader}>
+                {/* status bar */}
+                <StatusBar
+                    backgroundColor='#000000'
+                    barStyle='light-content'
+                />
+                <ActivityIndicator size="large" color="#9E9E9E" />
+            </View>
+        )
+    } else {
+        return (
+            <View style={styles.container}>
+                {/* status bar */}
+                <StatusBar
+                    backgroundColor='#000000'
+                    barStyle='light-content'
+                />
+                {/* if isn't the Login page, this function will render the input name*/}
+                {inputNameRender()}
                 <TextInput
                     style={styles.inputStyle}
                     placeholder="Email"
@@ -163,21 +193,15 @@ const LoginSignup = ({ navigation, route }) => {
                     maxLength={15}
                     secureTextEntry={true}
                 />
-
-                <TouchableOpacity style={styles.submitButton} onPress={() => handleSumbitSignup()}>
-                    <Text style={styles.submitButtonText}>Signup</Text>
-                </TouchableOpacity>
-
-                <Text
-                    style={styles.loginText}
-                    onPress={() => toggleRender('l')}>
-                    Already Registered? Click here to login
-                </Text>
+                {/* if isn't the Login page, this function will render the submit button and the link respectively*/}
+                {submitButtonRender()}
+                {linkRender()}
             </View>
         )
     }
 }
 
+// Styles section
 const styles = StyleSheet.create({
     container: {
         flex: 1,
