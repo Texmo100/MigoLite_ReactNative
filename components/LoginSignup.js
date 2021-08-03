@@ -1,6 +1,20 @@
 import React, { useState, useEffect } from 'react'
-import { StyleSheet, Text, View, TextInput, Button, Alert, ActivityIndicator, StatusBar, TouchableOpacity } from 'react-native';
+import { 
+    StyleSheet, 
+    Text, 
+    View, 
+    TextInput,
+    Button, 
+    Alert, 
+    ActivityIndicator, 
+    StatusBar, 
+    TouchableOpacity, 
+    ImageBackground, 
+    KeyboardAvoidingView, 
+    Platform
+} from 'react-native';
 import firebase from '../database/firebase';
+import image from '../images/image-01.jpg'
 
 const LoginSignup = ({ navigation, route }) => {
 
@@ -169,34 +183,42 @@ const LoginSignup = ({ navigation, route }) => {
         )
     } else {
         return (
-            <View style={styles.container}>
+            <KeyboardAvoidingView behavior={Platform.OS === 'android' ? 'height' : null} style={styles.container}>
                 {/* status bar */}
                 <StatusBar
                     backgroundColor='#000000'
                     barStyle='light-content'
                 />
-                {/* if isn't the Login page, this function will render the input name*/}
-                {inputNameRender()}
-                <TextInput
-                    style={styles.inputStyle}
-                    placeholder="Email"
-                    placeholderTextColor='#aeaeae'
-                    value={email}
-                    onChangeText={(value) => handleInput(value, 'email')}
-                />
-                <TextInput
-                    style={styles.inputStyle}
-                    placeholder="Password"
-                    placeholderTextColor='#aeaeae'
-                    value={password}
-                    onChangeText={(value) => handleInput(value, 'password')}
-                    maxLength={15}
-                    secureTextEntry={true}
-                />
-                {/* if isn't the Login page, this function will render the submit button and the link respectively*/}
-                {submitButtonRender()}
-                {linkRender()}
-            </View>
+                {/* Image container */}
+                <ImageBackground source={image} resizeMode='cover' style={styles.imageContainer}>
+                    <View style={styles.layer}></View>
+                </ImageBackground>
+                {/* Form container */}
+                <View style={styles.formContainer}>
+                    <Text style={styles.titlePage}>MigoLite</Text>
+                    {/* if isn't the Login page, this function will render the input name*/}
+                    {inputNameRender()}
+                    <TextInput
+                        style={styles.inputStyle}
+                        placeholder="Email"
+                        placeholderTextColor='#aeaeae'
+                        value={email}
+                        onChangeText={(value) => handleInput(value, 'email')}
+                    />
+                    <TextInput
+                        style={styles.inputStyle}
+                        placeholder="Password"
+                        placeholderTextColor='#aeaeae'
+                        value={password}
+                        onChangeText={(value) => handleInput(value, 'password')}
+                        maxLength={15}
+                        secureTextEntry={true}
+                    />
+                    {/* if isn't the Login page, this function will render the submit button and the link respectively*/}
+                    {submitButtonRender()}
+                    {linkRender()}
+                </View>
+            </KeyboardAvoidingView>
         )
     }
 }
@@ -205,9 +227,6 @@ const LoginSignup = ({ navigation, route }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: "center",
-        padding: 35,
-        backgroundColor: '#212121'
     },
     preloader: {
         left: 0,
@@ -218,6 +237,29 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: '#212121'
+    },
+    imageContainer: {
+        flex: 1,
+    },
+    layer: {
+        flex: 1,
+        backgroundColor: 'black',
+        opacity: 0.5,
+    },
+    formContainer: {
+        flex: 3,
+        justifyContent: "center",
+        padding: 35,
+        backgroundColor: '#212121',
+        borderTopStartRadius: 10,
+        borderTopEndRadius: 10,
+        marginTop: -10
+    },
+    titlePage: {
+        fontSize: 30,
+        textAlign: 'center',
+        color: '#e8e8e8',
+        marginBottom: 20
     },
     inputStyle: {
         width: '100%',
