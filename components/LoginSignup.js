@@ -15,6 +15,7 @@ import {
 } from 'react-native';
 import firebase from '../database/firebase';
 import image from '../images/image-01.jpg'
+import { Icon } from 'react-native-elements'
 
 const LoginSignup = ({ navigation, route }) => {
 
@@ -191,11 +192,17 @@ const LoginSignup = ({ navigation, route }) => {
                 />
                 {/* Image container */}
                 <ImageBackground source={image} resizeMode='cover' style={styles.imageContainer}>
-                    <View style={styles.layer}></View>
+                    <View style={styles.layer}>
+                        <View style={styles.iconContainer}>
+                            <Icon name='chevron-left' iconStyle={styles.iconArrow}/>
+                            <Icon name='circle' iconStyle={styles.iconCircle}/>
+                            <Icon name='chevron-right' iconStyle={styles.iconArrow}/>
+                        </View>
+                    </View>
                 </ImageBackground>
                 {/* Form container */}
                 <View style={styles.formContainer}>
-                    <Text style={styles.titlePage}>MigoLite</Text>
+                    <Text style={styles.titlePage}>{isLogin ? 'Login' : 'Signup'}</Text>
                     {/* if isn't the Login page, this function will render the input name*/}
                     {inputNameRender()}
                     <TextInput
@@ -245,6 +252,21 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: 'black',
         opacity: 0.5,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    iconContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        alignItems: 'center'
+    },
+    iconArrow: {
+        color: '#ffffff',
+        fontSize: 60
+    },
+    iconCircle: {
+        color: '#00acc1',
+        fontSize: 40
     },
     formContainer: {
         flex: 3,
