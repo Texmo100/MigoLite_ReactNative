@@ -25,7 +25,6 @@ const LoginSignup = ({ navigation, route }) => {
     const [password, setPassword] = useState('')
     const [isLoading, setIsLoading] = useState(false)
     const [isLogin, setIsLogin] = useState(true)
-    const [errorMessage, setErrorMessage] = useState('')
 
     // will rerender the page if isLogin change
     useEffect(() => { }, [isLogin])
@@ -37,7 +36,6 @@ const LoginSignup = ({ navigation, route }) => {
         setPassword('')
         setIsLoading(false)
         setIsLogin(true)
-        setErrorMessage('')
     }
 
     // reset the values(only for special cases)
@@ -70,10 +68,29 @@ const LoginSignup = ({ navigation, route }) => {
         }
     }
 
-    // function to handle the errors
-    const handleError = error => {
-        setErrorMessage(error)
-        console.log(errorMessage)
+    // function to handle the Login errors
+    const handleErrorLogin = error => {
+        if(error.code === 'auth/invalid-email'){
+            Alert.alert('Invalid email')
+            setIsLoading(false)
+        }else if(error.code === 'auth/user-not-found'){
+            Alert.alert('User not found')
+            setIsLoading(false)
+        }else if(error.code === 'auth/wrong-password'){
+            Alert.alert("Wrong password")
+            setIsLoading(false)
+        }
+    }
+
+    // function to handle the Signup Errors
+    const handleErrorSignup = error => {
+        if(error.code === 'auth/email-already-in-use'){
+            Alert.alert('This email is alredy in use')
+            setIsLoading(false)
+        }else if(error.code === 'auth/invalid-email'){
+            Alert.alert('Invalid Email')
+            setIsLoading(false)
+        }
     }
 
     // function to handle the submit event in Login page
@@ -85,33 +102,37 @@ const LoginSignup = ({ navigation, route }) => {
             firebase
                 .auth()
                 .signInWithEmailAndPassword(email, password)
-                .then((res) => {
-                    console.log(res)
+                .then((userCredential) => {
+                    let user = userCredential.user
+                    console.log(user)
                     console.log('User logged-in successfully!')
                     allInitialValues()
                     navigation.navigate('Dashboard')
                 })
-                .catch(error => handleError(error.message))
+                .catch((error) => handleErrorLogin(error))
         }
     }
 
     // function to handle submit event in Signup page
     const handleSumbitSignup = () => {
-        if (email === '' || password === '') {
+        if(displayName === ''){
+            Alert.alert('Enter details to signup!')
+        }else if (email === '' || password === '') {
             Alert.alert('Enter details to signup!')
         } else {
             setIsLoading(true)
             firebase
                 .auth()
                 .createUserWithEmailAndPassword(email, password)
-                .then((res) => {
-                    res.user.updateProfile({
+                .then((userCredential) => {
+                    userCredential.user.updateProfile({
                         displayName: displayName
                     })
+                    Alert.alert('User registered successfully!')
                     console.log('User registered successfully!')
                     allInitialValues()
                 })
-                .catch(error => handleError(error.message))
+                .catch((error) => handleErrorSignup(error))
         }
     }
 
