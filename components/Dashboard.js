@@ -1,56 +1,81 @@
-// components/dashboard.js
+import React, { useState, useEffect } from 'react'
+import {
+StyleSheet,
+View,
+Text,
+Button,
+TextInput,
+TouchableOpacity,
+Dimensions,
+KeyboardAvoidingView,
+Platform,
+Image,
+ScrollView,
+} from 'react-native'
+import firebase from '../database/firebase'
+import MigoCard from './MigoCard'
+import image from '../images/image-01.jpg'
 
-import React, { Component } from 'react';
-import { StyleSheet, View, Text, Button } from 'react-native';
-import firebase from '../database/firebase';
+const Dashboard = ({ navigation, route }) => {
+  // State section
+  const [displayName, setDisplayName] = useState(firebase.auth().currentUser.displayName)
+  const [uid, setUid] = useState(firebase.auth().currentUser.uid)
+  const [animeList, setAnimeList] = useState([])
+  const [Title, setAnimeTitle] = useState('')
+  const [episodes, setEpisodes] = useState(0)
+  const [status, setStatus] = useState('')
+  const [rate, setRate] = useState(0)
 
-export default class Dashboard extends Component {
-  constructor() {
-    super();
-    this.state = { 
-      uid: ''
+  // useEffect
+
+  // function to handle signOut action
+  const signOut = () => {
+    firebase.auth().signOut().then(() => {
+      navigation.navigate('LoginSignup')
+    })
+      .catch(error => console.log(error.message))
+  }
+
+  // function to handle input event
+  const handleInputAnime = (value, name) => {
+    if (name === 'inputAnime') {
+      setInputAnime(value)
     }
   }
 
-  signOut = () => {
-    firebase.auth().signOut().then(() => {
-      this.props.navigation.navigate('LoginSignup')
+  // function to handle submit event
+  const handleSubmitAnime = () => {
+    firebase.firestore().collection('animes').add({
+      animeTitle: inputAnime
     })
-    .catch(error => this.setState({ errorMessage: error.message }))
-  }  
-
-  render() {
-    this.state = { 
-      displayName: firebase.auth().currentUser.displayName,
-      uid: firebase.auth().currentUser.uid
-    }    
-    return (
-      <View style={styles.container}>
-        <Text style = {styles.textStyle}>
-          Hello, {this.state.displayName}
-        </Text>
-
-        <Button
-          color="#3740FE"
-          title="Logout"
-          onPress={() => this.signOut()}
-        />
-      </View>
-    );
+    .then((docRef) => {
+      console.log("Document written with ID: ", docRef.id)
+      setInputAnime('')
+    })
+    .catch((error) => {
+      console.log(error)
+    })
   }
+
+  return (
+    <View style={styles.container}>
+
+    </View>
+  )
 }
 
+// get the current screen width
+const screenWidth = Dimensions.get('screen').width
+
+// Styles section
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    display: "flex",
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 35,
-    backgroundColor: '#fff'
+    padding: 20,
+    backgroundColor: '#2b2b2b'
   },
-  textStyle: {
-    fontSize: 15,
-    marginBottom: 20
-  }
-});
+})
+
+export default Dashboard
