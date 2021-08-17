@@ -6,7 +6,7 @@ import {
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import LoginSignup from '../LoginSignup';
-import Dashboard from '../Dashboard';
+import TabNavigation from '../navigation/TabNavigation'
 import { Icon } from 'react-native-elements'
 
 const StackNavigation = () => {
@@ -41,8 +41,8 @@ const StackNavigation = () => {
                     options={defaultOptionsLs}
                 />
                 <Stack.Screen
-                    name="Dashboard"
-                    component={Dashboard}
+                    name="TabNavigation"
+                    component={TabNavigation}
                     options={defaultOptionsDshaboard}
                 />
             </Stack.Navigator>
