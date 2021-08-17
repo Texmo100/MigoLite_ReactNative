@@ -13,7 +13,9 @@ const StackNavigation = () => {
     const defaultOptionsTabNavigation = {
         title: 'MIGOLite',
         headerStyle: {
-            backgroundColor: '#212121'
+            backgroundColor: '#212121',
+            elevation: 0,
+            shadowOpacity: 0,
         },
         headerTintColor: '#ffffff',
     }
