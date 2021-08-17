@@ -1,5 +1,5 @@
 import React from 'react'
-import StackNavigation from './components/StackNavigation'
+import StackNavigation from './components/navigation/StackNavigation'
 
 const App = () => {
   return(

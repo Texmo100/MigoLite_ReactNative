@@ -5,8 +5,8 @@ import {
 } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import LoginSignup from './LoginSignup';
-import Dashboard from './Dashboard';
+import LoginSignup from '../LoginSignup';
+import Dashboard from '../Dashboard';
 import { Icon } from 'react-native-elements'
 
 const StackNavigation = () => {
