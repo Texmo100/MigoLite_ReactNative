@@ -1,11 +1,53 @@
-import React from 'react'
+import React, { useLayoutEffect } from 'react'
+import { StyleSheet, Alert } from 'react-native'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
 import AnimeScreen from '../tabScreens/AnimeScreen'
 import MangaScreen from '../tabScreens/MangaScreen'
+import firebase from '../../database/firebase'
+import { Icon } from 'react-native-elements'
 
-const Tab = createMaterialTopTabNavigator()
 
-const TabNavigation = () => {
+const TabNavigation = ({ navigation }) => {
+
+    // material top tab navigator created
+    const Tab = createMaterialTopTabNavigator()
+
+    // useLayoutEffect function
+    useLayoutEffect(() => {
+        navigation.setOptions({
+            headerLeft: () => (
+                <Icon
+                    name='bars'
+                    type='font-awesome'
+                    iconStyle={styles.leftButton}
+                    onPress={() => signOut()}
+                />
+            )
+        })
+    }, [navigation])
+
+    // function to handle signOut action
+    const signOut = () => {
+        firebase.auth().signOut().then(() => {
+            navigation.navigate('LoginSignup')
+        })
+            .catch(error => console.log(error.message))
+    }
+
+    // function to handle submit event
+    const handleSubmitAnime = () => {
+        firebase.firestore().collection('animes').add({
+            animeTitle: inputAnime
+        })
+            .then((docRef) => {
+                console.log("Document written with ID: ", docRef.id)
+                setInputAnime('')
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+    }
+
     return (
         <Tab.Navigator>
             <Tab.Screen name="Anime" component={AnimeScreen} />
@@ -13,5 +55,12 @@ const TabNavigation = () => {
         </Tab.Navigator>
     )
 }
+
+const styles = StyleSheet.create({
+    leftButton: {
+        color: '#e8e8e8',
+        marginLeft: 20
+    }
+})
 
 export default TabNavigation
