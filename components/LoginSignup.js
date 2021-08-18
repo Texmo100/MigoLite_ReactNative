@@ -107,7 +107,7 @@ const LoginSignup = ({ navigation, route }) => {
                     console.log(user)
                     console.log('User logged-in successfully!')
                     allInitialValues()
-                    navigation.navigate('TabNavigation')
+                    navigation.navigate('DrawerNavigation')
                 })
                 .catch((error) => handleErrorLogin(error))
         }

@@ -2,23 +2,12 @@ import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import LoginSignup from '../LoginSignup';
-import TabNavigation from '../navigation/TabNavigation'
+import DrawerNavigation from './DrawerNavigation';
 
 const StackNavigation = () => {
 
     // default login/signup screen options
-    const defaultOptionsLs = { headerShown: false }
-
-    // default tab navigation options
-    const defaultOptionsTabNavigation = {
-        title: 'MIGOLite',
-        headerStyle: {
-            backgroundColor: '#212121',
-            elevation: 0,
-            shadowOpacity: 0,
-        },
-        headerTintColor: '#ffffff',
-    }
+    const defaultOptions = { headerShown: false }
 
     // creation stack
     const Stack = createStackNavigator()
@@ -29,12 +18,12 @@ const StackNavigation = () => {
                 <Stack.Screen
                     name="LoginSignup"
                     component={LoginSignup}
-                    options={defaultOptionsLs}
+                    options={defaultOptions}
                 />
                 <Stack.Screen
-                    name="TabNavigation"
-                    component={TabNavigation}
-                    options={defaultOptionsTabNavigation}
+                    name="DrawerNavigation"
+                    component={DrawerNavigation}
+                    options={defaultOptions}
                 />
             </Stack.Navigator>
         </NavigationContainer>

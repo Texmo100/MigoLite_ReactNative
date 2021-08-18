@@ -1,30 +1,14 @@
-import React, { useLayoutEffect } from 'react'
+import React from 'react'
 import { StyleSheet, Alert } from 'react-native'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
 import AnimeScreen from '../tabScreens/AnimeScreen'
 import MangaScreen from '../tabScreens/MangaScreen'
 import firebase from '../../database/firebase'
-import { Icon } from 'react-native-elements'
-
 
 const TabNavigation = ({ navigation }) => {
 
     // material top tab navigator created
     const Tab = createMaterialTopTabNavigator()
-
-    // useLayoutEffect function
-    useLayoutEffect(() => {
-        navigation.setOptions({
-            headerLeft: () => (
-                <Icon
-                    name='bars'
-                    type='font-awesome'
-                    iconStyle={styles.leftButton}
-                    onPress={() => signOut()}
-                />
-            )
-        })
-    }, [navigation])
 
     // function to handle signOut action
     const signOut = () => {
@@ -73,12 +57,5 @@ const TabNavigation = ({ navigation }) => {
         </Tab.Navigator>
     )
 }
-
-const styles = StyleSheet.create({
-    leftButton: {
-        color: '#e8e8e8',
-        marginLeft: 20
-    }
-})
 
 export default TabNavigation
