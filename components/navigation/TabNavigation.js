@@ -1,7 +1,9 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { Alert, BackHandler } from 'react-native'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
 import AnimeScreen from '../tabScreens/AnimeScreen'
 import MangaScreen from '../tabScreens/MangaScreen'
+import firebase from '../../database/firebase'
 
 const TabNavigation = ({ navigation }) => {
 
@@ -14,8 +16,8 @@ const TabNavigation = ({ navigation }) => {
             backgroundColor: '#212121',
             height: 50
         },
-        tabBarLabelStyle: { 
-            fontSize: 15, 
+        tabBarLabelStyle: {
+            fontSize: 15,
             color: '#e8e8e8'
         },
         tabBarIndicatorStyle: {
@@ -25,6 +27,46 @@ const TabNavigation = ({ navigation }) => {
         },
         scrollEnabled: true,
     }
+
+    // function to handle signOut action
+    const signOut = () => {
+        firebase.auth().signOut().then(() => {
+            navigation.navigate('LoginSignup')
+        })
+            .catch(error => console.log(error.message))
+    }
+
+    // useEffect function to mount a custom back handler action
+    useEffect(() => {
+        const backAction = () => {
+            Alert.alert(
+                "Hold on!",
+                "Are you sure you want to go back?",
+                [
+                    {
+                        text: "Cancel",
+                        onPress: () => null,
+                        style: "cancel"
+                    },
+                    {
+                        text: "YES",
+                        onPress: () => signOut()
+                    }
+                ],
+                {
+                    cancelable: true
+                }
+            )
+            return true;
+        }
+
+        const backHandler = BackHandler.addEventListener(
+            "hardwareBackPress",
+            backAction
+        )
+
+        return () => backHandler.remove();
+    }, [])
 
     return (
         <Tab.Navigator screenOptions={tabNavigationOptions}>

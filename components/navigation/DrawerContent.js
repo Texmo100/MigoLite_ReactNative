@@ -4,6 +4,28 @@ import firebase from '../../database/firebase'
 
 const DrawerContent = ({ navigation }) => {
 
+    // custom Alert dialog to handle the signout action
+    const customSignOutButton = () => {
+        Alert.alert(
+            "Warning",
+            "Are you sure want to signout?",
+            [
+                {
+                    text: 'signout',
+                    onPress: () => signOut()
+                },
+                {
+                    text: 'Cancel',
+                    style: 'cancel'
+                },
+
+            ],
+            {
+                cancelable: true
+            }
+        )
+    }
+
     // function to handle signOut action
     const signOut = () => {
         firebase.auth().signOut().then(() => {
@@ -17,7 +39,7 @@ const DrawerContent = ({ navigation }) => {
             <Text>Drawer content</Text>
             <Button
                 title='Signout'
-                onPress={() => signOut()}
+                onPress={() => customSignOutButton()}
             />
         </View>
     )
