@@ -1,5 +1,5 @@
 import React from 'react'
-import StackNavigation from './components/navigation/StackNavigation'
+import DrawerNavigation from './components/navigation/DrawerNavigation'
 import {LogBox } from 'react-native';
 
 
@@ -8,7 +8,7 @@ LogBox.ignoreLogs(['Reanimated 2']);
 
 const App = () => {
   return(
-    <StackNavigation/>
+    <DrawerNavigation />
   )
 }
 

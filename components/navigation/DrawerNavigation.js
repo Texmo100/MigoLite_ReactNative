@@ -1,36 +1,52 @@
 import React, { useLayoutEffect } from 'react'
-import { StyleSheet } from 'react-native'
+import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer'
-import TabNavigation from './TabNavigation'
+import { StyleSheet } from 'react-native'
 import { Icon } from 'react-native-elements'
-
+import LoginSignup from '../LoginSignup';
+import TabNavigation from './TabNavigation'
+import DrawerContent from './DrawerContent';
 
 const DrawerNavigation = ({ navigation }) => {
+
+    // create Drawer
     const Drawer = createDrawerNavigator()
 
+    // default login/signup screen options
+    const defaultOptions = {
+        headerShown: false,
+        drawerLabel: 'Login and Signup',
+        swipeEnabled: false
+    }
+
     // default tab navigation options
-    const drawerDefaultOptions = {
+    const tabDefaultOptions = {
+        drawerLabel: 'Home',
         title: 'MIGOLite',
         headerStyle: {
             backgroundColor: '#212121',
             elevation: 0,
             shadowOpacity: 0,
         },
-        headerTintColor: '#ffffff',
+        headerTintColor: '#ffffff'
     }
 
     return (
-        <Drawer.Navigator initialRouteName="Home" screenOptions={drawerDefaultOptions}>
-            <Drawer.Screen name="Home" component={TabNavigation}/>
-        </Drawer.Navigator>
+        <NavigationContainer>
+            <Drawer.Navigator initialRouteName="LoginSignup" drawerContent={(props)=> <DrawerContent {...props}/>}>
+                <Drawer.Screen
+                    name="LoginSignup"
+                    component={LoginSignup}
+                    options={defaultOptions}
+                />
+                <Drawer.Screen
+                    name="Home"
+                    component={TabNavigation}
+                    options={tabDefaultOptions}
+                />
+            </Drawer.Navigator>
+        </NavigationContainer>
     )
 }
-
-const styles = StyleSheet.create({
-    leftButton: {
-        color: '#e8e8e8',
-        marginLeft: 20
-    }
-})
 
 export default DrawerNavigation
