@@ -2,7 +2,7 @@ import React from 'react'
 import { View, Text, StyleSheet, Button, Alert } from 'react-native'
 import firebase from '../../database/firebase'
 
-const DrawerContent = ({ navigation }) => {
+const DrawerContent = ({ navigation}) => {
 
     // custom Alert dialog to handle the signout action
     const customSignOutButton = () => {

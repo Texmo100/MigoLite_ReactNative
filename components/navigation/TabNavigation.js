@@ -5,7 +5,10 @@ import AnimeScreen from '../tabScreens/AnimeScreen'
 import MangaScreen from '../tabScreens/MangaScreen'
 import firebase from '../../database/firebase'
 
-const TabNavigation = ({ navigation }) => {
+const TabNavigation = ({ navigation, route }) => {
+
+    // object destructuring to get the userData given by the LoginSignup page
+    const { userData } = route.params
 
     // material top tab navigator created
     const Tab = createMaterialTopTabNavigator()
@@ -33,45 +36,38 @@ const TabNavigation = ({ navigation }) => {
         firebase.auth().signOut().then(() => {
             navigation.navigate('LoginSignup')
         })
-            .catch(error => console.log(error.message))
+        .catch(error => console.log(error.message))
+    }
+
+    // custom back action
+    const backAction = () => {
+        Alert.alert("Hold on!", "Are you sure you want to go back?", [
+            {
+                text: "Cancel",
+                onPress: () => null,
+                style: "cancel"
+            },
+            { text: "YES", onPress: () => signOut() }
+        ])
+        return true
     }
 
     // useEffect function to mount a custom back handler action
     useEffect(() => {
-        const backAction = () => {
-            Alert.alert(
-                "Hold on!",
-                "Are you sure you want to go back?",
-                [
-                    {
-                        text: "Cancel",
-                        onPress: () => null,
-                        style: "cancel"
-                    },
-                    {
-                        text: "YES",
-                        onPress: () => signOut()
-                    }
-                ],
-                {
-                    cancelable: true
-                }
-            )
-            return true;
-        }
-
-        const backHandler = BackHandler.addEventListener(
-            "hardwareBackPress",
-            backAction
-        )
-
-        return () => backHandler.remove();
+        BackHandler.addEventListener("hardwareBackPress", backAction);
+        return () => BackHandler.removeEventListener("hardwareBackPress", backAction)
     }, [])
 
     return (
         <Tab.Navigator screenOptions={tabNavigationOptions}>
-            <Tab.Screen name="Anime" component={AnimeScreen} />
-            <Tab.Screen name="Manga" component={MangaScreen} />
+            <Tab.Screen
+                name="Anime"
+                component={AnimeScreen}
+            />
+            <Tab.Screen
+                name="Manga"
+                component={MangaScreen}
+            />
         </Tab.Navigator>
     )
 }

@@ -1,4 +1,4 @@
-import React, { useLayoutEffect } from 'react'
+import React, { useState, useLayoutEffect } from 'react'
 import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer'
 import { StyleSheet } from 'react-native'
@@ -33,17 +33,17 @@ const DrawerNavigation = ({ navigation }) => {
 
     return (
         <NavigationContainer>
-            <Drawer.Navigator initialRouteName="LoginSignup" drawerContent={(props)=> <DrawerContent {...props}/>}>
-                <Drawer.Screen
-                    name="LoginSignup"
-                    component={LoginSignup}
-                    options={defaultOptions}
-                />
-                <Drawer.Screen
-                    name="Home"
-                    component={TabNavigation}
-                    options={tabDefaultOptions}
-                />
+            <Drawer.Navigator initialRouteName="LoginSignup" drawerContent={(props) => <DrawerContent {...props}/>}>
+                    <Drawer.Screen
+                        name="LoginSignup"
+                        component={LoginSignup}
+                        options={defaultOptions}
+                    />
+                    <Drawer.Screen
+                        name="Home"
+                        component={TabNavigation}
+                        options={tabDefaultOptions}
+                    />
             </Drawer.Navigator>
         </NavigationContainer>
     )
