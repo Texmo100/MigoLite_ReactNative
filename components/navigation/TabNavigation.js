@@ -5,10 +5,7 @@ import AnimeScreen from '../tabScreens/AnimeScreen'
 import MangaScreen from '../tabScreens/MangaScreen'
 import firebase from '../../database/firebase'
 
-const TabNavigation = ({ navigation, route }) => {
-
-    // object destructuring to get the userData given by the LoginSignup page
-    const { userData } = route.params
+const TabNavigation = ({ navigation }) => {
 
     // material top tab navigator created
     const Tab = createMaterialTopTabNavigator()
@@ -31,23 +28,15 @@ const TabNavigation = ({ navigation, route }) => {
         scrollEnabled: true,
     }
 
-    // function to handle signOut action
-    const signOut = () => {
-        firebase.auth().signOut().then(() => {
-            navigation.navigate('LoginSignup')
-        })
-        .catch(error => console.log(error.message))
-    }
-
     // custom back action
     const backAction = () => {
-        Alert.alert("Hold on!", "Are you sure you want to go back?", [
+        Alert.alert("Hold on!", "Are you sure you want to exit the app?", [
             {
                 text: "Cancel",
                 onPress: () => null,
                 style: "cancel"
             },
-            { text: "YES", onPress: () => signOut() }
+            { text: "YES", onPress: () => BackHandler.exitApp()}
         ])
         return true
     }
